@@ -1,3 +1,7 @@
+package src.main.java;
+
+import src.main.java.ChatServer;
+
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.InetAddress;

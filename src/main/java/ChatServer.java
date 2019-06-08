@@ -1,3 +1,5 @@
+package src.main.java;
+
 import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.ServerSocket;
