@@ -6,7 +6,7 @@ public class ServerGUI{
     private JPanel panel1;
     private JButton msg_send;
     private JTextArea msg_area;
-    private JTextField msg_text;
+    private JTextArea msg_text;
 
 
 
