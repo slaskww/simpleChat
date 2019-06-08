@@ -1,12 +1,18 @@
-package src.main.java;
+package src.main.java.login;
+
+import src.main.java.client.ClientGUI;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class LoginGUI extends JFrame {
 
     private static final long serialVeersionUID = 1L;
+
+  //  LoginButtonHandler handle = new LoginButtonHandler(); //obiekt ten rozszerza interfejs ActionListener, obsługuje zdarzenie klikniecia w przycisk btnLogin
 
     private JPanel contentPane; //nasz panel logowania
     private JTextField txtName; //pole przyjmujące nazwe usera
@@ -21,54 +27,80 @@ public class LoginGUI extends JFrame {
     private JButton btnLogin;
 
     public LoginGUI() { //konstruktor ustawia wartosci domyslne
+
+        try {
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());  //  ustawioamy wygląd GUI (Look&Feel) zgodny z systemem operac. zytkownika
+        } catch (Exception e1) {
+            e1.printStackTrace();
+        }
+        createWindow();
+    }
+
+    private void createWindow(){
         setTitle("Login");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(300, 400); //frame size
         setLocationRelativeTo(null); // If the component is null , the window is placed in the center of the screen
+
         contentPane = new JPanel(); //na panelu umiejscowiamy buttony i labele
         contentPane.setBorder(new EmptyBorder(5,5,5,5));
         contentPane.setLayout(new BorderLayout(0,0));
         setContentPane(contentPane);
-        contentPane.setLayout(null); //ustawiamy absoluteLayout, wielkosc okna bedzie stała
+        //  add(clientPane); //alternative way to add this child to the JFrame
 
+        contentPane.setLayout(null); //ustawiamy absoluteLayout - for any window, that does not need to be resizeable
 
-        txtName = new JTextField();
-        txtName.setBounds(70,50,160,33);
+        txtName = new JTextField("");
+        txtName.setBounds(65,50,160,33);
         contentPane.add(txtName);
-     //   txtName.setColumns(10);
         lblName = new JLabel("Name:");
-        lblName.setBounds(125, 32, 40, 18);
+        lblName.setBounds(95, 32, 100, 18);
         contentPane.add(lblName);
+        lblName.setHorizontalAlignment(SwingConstants.CENTER);
 
-        txtIPAddress = new JTextField();
-        txtIPAddress.setBounds(70,126,160,33);
+        txtIPAddress = new JTextField("");
+        txtIPAddress.setBounds(65,126,160,33);
         contentPane.add(txtIPAddress);
-        //   txtName.setColumns(10);
         lblIPAddress = new JLabel("IP Address:");
-        lblIPAddress.setBounds(112, 108, 80, 18);
+        lblIPAddress.setBounds(95, 108, 100, 18);
+        lblIPAddress.setHorizontalAlignment(SwingConstants.CENTER);
         contentPane.add(lblIPAddress);
         txtIPAddress.setColumns(10);
         lblIPAddressHint = new JLabel("(ex. 192.168.0.1)");
-        lblIPAddressHint.setBounds(85, 160,120, 16 );
+        lblIPAddressHint.setBounds(95, 160,100, 16 );
         lblIPAddressHint.setHorizontalAlignment(SwingConstants.CENTER);
         contentPane.add(lblIPAddressHint);
 
-        txtPort = new JTextField();
-        txtPort.setBounds(70,210,160,33);
+        txtPort = new JTextField("");
+        txtPort.setBounds(65,210,160,33);
         contentPane.add(txtPort);
         lblPort = new JLabel("Port:");
-        lblPort.setBounds(129, 192, 80, 18);
+        lblPort.setBounds(95, 192, 100, 18);
+        lblPort.setHorizontalAlignment(SwingConstants.CENTER);
         contentPane.add(lblPort);
         lblPortHint = new JLabel(("(ex. 1234)"));
-        lblPortHint.setBounds(120, 240, 80, 18);
+        lblPortHint.setBounds(95, 240, 100, 18);
+        lblPortHint.setHorizontalAlignment(SwingConstants.CENTER);
         contentPane.add(lblPortHint);
 
         btnLogin = new JButton("Login");
+        btnLogin.addActionListener(e -> {
+            String name = txtName.getText();
+            String iPAddress = txtIPAddress.getText();
+            int port = Integer.parseInt(txtPort.getText());
+            login(name, iPAddress, port);
+        });
+
         btnLogin.setBounds(105, 300, 80, 33);
         contentPane.add(btnLogin);
 
     }
 
+
+    private void login(String name, String address, int port ){
+        dispose(); //zamyka (niszczy) JFrame
+        new ClientGUI(name, address, port);
+    }
     public static void main(String[] args) {
 
 
