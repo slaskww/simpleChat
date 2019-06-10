@@ -5,8 +5,6 @@ import src.main.java.client.ClientGUI;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 public class LoginGUI extends JFrame {
 
@@ -28,23 +26,26 @@ public class LoginGUI extends JFrame {
 
     public LoginGUI() { //konstruktor ustawia wartosci domyslne
 
+        createWindow();
+    }
+
+    private void createWindow(){
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());  //  ustawioamy wygląd GUI (Look&Feel) zgodny z systemem operac. zytkownika
         } catch (Exception e1) {
             e1.printStackTrace();
         }
-        createWindow();
-    }
 
-    private void createWindow(){
-        setTitle("Login");
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setTitle("Login"); //frame name
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); //frame [x] close operation
         setSize(300, 400); //frame size
         setLocationRelativeTo(null); // If the component is null , the window is placed in the center of the screen
 
         contentPane = new JPanel(); //na panelu umiejscowiamy buttony i labele
         contentPane.setBorder(new EmptyBorder(5,5,5,5));
         contentPane.setLayout(new BorderLayout(0,0));
+        contentPane.setBackground(new Color(71,89,135));
+
         setContentPane(contentPane);
         //  add(clientPane); //alternative way to add this child to the JFrame
 
