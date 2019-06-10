@@ -4,6 +4,7 @@ import src.main.java.client.ClientGUI;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
+import javax.swing.text.JTextComponent;
 import java.awt.*;
 
 public class LoginGUI extends JFrame {
@@ -53,6 +54,7 @@ public class LoginGUI extends JFrame {
 
         txtName = new JTextField("");
         txtName.setBounds(65,50,160,33);
+        setFont(txtName);
         contentPane.add(txtName);
         lblName = new JLabel("Name:");
         lblName.setBounds(95, 32, 100, 18);
@@ -61,6 +63,7 @@ public class LoginGUI extends JFrame {
 
         txtIPAddress = new JTextField("");
         txtIPAddress.setBounds(65,126,160,33);
+        setFont(txtIPAddress);
         contentPane.add(txtIPAddress);
         lblIPAddress = new JLabel("IP Address:");
         lblIPAddress.setBounds(95, 108, 100, 18);
@@ -74,6 +77,7 @@ public class LoginGUI extends JFrame {
 
         txtPort = new JTextField("");
         txtPort.setBounds(65,210,160,33);
+        setFont(txtPort);
         contentPane.add(txtPort);
         lblPort = new JLabel("Port:");
         lblPort.setBounds(95, 192, 100, 18);
@@ -96,7 +100,10 @@ public class LoginGUI extends JFrame {
         contentPane.add(btnLogin);
 
     }
-
+private void setFont(JTextComponent component)
+{
+    component.setFont(new Font("Consolas", Font.PLAIN, 16 )); //style: 0=plain, 1=bold, 2= italic
+}
 
     private void login(String name, String address, int port ){
         dispose(); //zamyka (niszczy) JFrame

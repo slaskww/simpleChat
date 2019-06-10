@@ -2,7 +2,12 @@ package src.main.java.client;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
+import javax.swing.text.JTextComponent;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 public class ClientGUI extends JFrame {
     private static final long serialVersionUID = 1L;
@@ -57,7 +62,7 @@ public class ClientGUI extends JFrame {
          gblTxtHistory.gridy = 1; //obiekt txtHistory zostaje wrzucony do wiersza 2 (index 1)
          gblTxtHistory.gridwidth = 2;
          gblTxtHistory.insets = new Insets(15,5,0, 0);
-         txtHistory.setFont(new Font("Consolas", 0, 16 )); //style: 0=plain, 1=bold, 2= italic
+         setFont(txtHistory);
          clientPane.add(txtHistory, gblTxtHistory);
 
          txtMessage = new JTextField();
@@ -66,11 +71,26 @@ public class ClientGUI extends JFrame {
          gbcTxtMessage.fill = GridBagConstraints.HORIZONTAL;
          gbcTxtMessage.gridx = 1; //obiekt txtMessage zostaje wrzucony do kolumny 2 (index 1)
          gbcTxtMessage.gridy = 2; //obiekt txtMessage zostaje wrzucony do wiersza 3 (index 2)
+         setFont(txtMessage);
+         txtMessage.addKeyListener(new KeyAdapter() {
+             @Override
+             public void keyPressed(KeyEvent e) {
+                 if (e.getKeyCode() == KeyEvent.VK_ENTER){
+                     sent(txtMessage.getText());
+                 }
+             }
+         });
          clientPane.add(txtMessage, gbcTxtMessage);
          txtMessage.setColumns(10);
 
          btnSend = new JButton("Send");
          GridBagConstraints gbcBtnSent = new GridBagConstraints();
+         btnSend.addActionListener(new ActionListener() {
+             @Override
+             public void actionPerformed(ActionEvent e) {
+                sent(txtMessage.getText());
+             }
+         });
          gbcBtnSent.insets = new Insets(0,0,0,0);
          gbcBtnSent.gridx = 2; //obiekt btnSend zostaje wrzucony do kolumny 3 (index 2)
          gbcBtnSent.gridy = 2; //obiekt btnSend zostaje wrzucony do wiersza 3 (index 2)
@@ -81,8 +101,22 @@ public class ClientGUI extends JFrame {
 
      }
 
+    private void setFont(JTextComponent component)
+    {
+        component.setFont(new Font("Consolas", Font.PLAIN, 16 )); //style: 0=plain, 1=bold, 2= italic
+    }
+
+     private void sent(String msg){
+
+        if (msg.equals(""))
+        {return;}
+         msg = name + ": " + msg;
+         console(msg);
+         txtMessage.setText("");
+     }
+
      public void console(String message){
-        txtHistory.append(message);
+        txtHistory.append(message + "\n");
      }
 
 }
