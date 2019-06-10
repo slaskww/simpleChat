@@ -61,7 +61,7 @@ public class LoginGUI extends JFrame {
         contentPane.add(lblName);
         lblName.setHorizontalAlignment(SwingConstants.CENTER);
 
-        txtIPAddress = new JTextField("");
+        txtIPAddress = new JTextField("localhost");
         txtIPAddress.setBounds(65,126,160,33);
         setFont(txtIPAddress);
         contentPane.add(txtIPAddress);
@@ -75,7 +75,7 @@ public class LoginGUI extends JFrame {
         lblIPAddressHint.setHorizontalAlignment(SwingConstants.CENTER);
         contentPane.add(lblIPAddressHint);
 
-        txtPort = new JTextField("");
+        txtPort = new JTextField("1234");
         txtPort.setBounds(65,210,160,33);
         setFont(txtPort);
         contentPane.add(txtPort);
