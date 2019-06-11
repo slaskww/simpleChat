@@ -12,12 +12,11 @@ public class ServerClient {
                              //in that case the server will try to sent the package once again and will increment attempt field. When
                              //attempt value is greater than maximum value, the server will drop the client - remove it from the list of clients)
 
-    public ServerClient(String name, InetAddress clientIPAddress, int clientPort, int ID, int attempt) {
+    public ServerClient(String name, InetAddress clientIPAddress, int clientPort, int ID) {
         this.name = name;
         this.clientIPAddress = clientIPAddress;
         this.clientPort = clientPort;
         this.clientID = ID;
-        this.attempt = attempt;
     }
 
     public int getClientID() {

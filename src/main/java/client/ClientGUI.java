@@ -14,7 +14,7 @@ import java.util.Arrays;
 public class ClientGUI extends JFrame {
     private static final long serialVersionUID = 1L;
 
-    private DatagramSocket socket;
+    private DatagramSocket socket; //a socket is an analogy to the post office, so we use the socket to send our packets
 
     private String name;
     private String serverIPAddress;
@@ -41,7 +41,7 @@ public class ClientGUI extends JFrame {
 
         createWindow();
         console("Attempting a connection to " + iPAddress + ":" + port + ", user: " + name);
-        String connectionInfo = name + " connected from " + iPAddress + ":" +  port;
+        String connectionInfo = "/c/" + name + " connected from " + iPAddress + ":" +  port;
         send(connectionInfo.getBytes());
     }
 
@@ -49,7 +49,7 @@ public class ClientGUI extends JFrame {
     private boolean openConnection(String address) {
 
         try {
-            socket = new DatagramSocket();
+            socket = new DatagramSocket(); //a socket is an analogy to the post office, so we use the socket to send our packets
             serverIP = InetAddress.getByName(address);
         } catch (SocketException | UnknownHostException e) {
             return false;
@@ -61,7 +61,7 @@ public class ClientGUI extends JFrame {
     private String receive() {
 
         byte[] data = new byte[1024];
-        DatagramPacket packet = new DatagramPacket(data, data.length); //cereived packet of data
+        DatagramPacket packet = new DatagramPacket(data, data.length); //received a packet of data
 
         try {
             socket.receive(packet); //this method freezes our application (one thread) until our socket gets some data from the network ( receive() uses an infinite while loop)
@@ -75,9 +75,9 @@ public class ClientGUI extends JFrame {
 
         send = new Thread("Send") {
             public void run() {
-                DatagramPacket packet = new DatagramPacket(data, data.length, serverIP, serverPort);
+                DatagramPacket packet = new DatagramPacket(data, data.length, serverIP, serverPort);  // a packet is an analogy to a letter
                 try {
-                    socket.send(packet);
+                    socket.send(packet); //a socket is an analogy to the post office, so we use the socket to send our packets
                 } catch (java.io.IOException e) {
                 }
             }
@@ -172,6 +172,7 @@ public class ClientGUI extends JFrame {
         }
         msg = name + ":" + msg;
         console(msg);
+        msg = "/m/" + msg;
         send(msg.getBytes()); //we send our message to the server
         txtMessage.setText("");
     }

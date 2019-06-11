@@ -2,15 +2,15 @@ package src.main.java.server;
 
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
+import java.net.InetAddress;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class Server implements Runnable {
 
     private List<ServerClient> clients = new ArrayList<>();
 
-    private DatagramSocket socket;
+    private DatagramSocket socket; //a socket is an analogy to the post office, so we use the socket to send our packets
     private int port;
     private boolean isRunning = false;
     private Thread run, manage, receive, send;
@@ -19,7 +19,7 @@ public class Server implements Runnable {
         this.port = port;
         try {
             socket = new DatagramSocket(port);
-        } catch (java.net.SocketException e){
+        } catch (java.net.SocketException e) {
         }
 
         run = new Thread(this, "Server");
@@ -34,11 +34,11 @@ public class Server implements Runnable {
         receive();
     }
 
-    private void manageClients(){
-        manage = new Thread("Manage"){
-            public void run(){
+    private void manageClients() {
+        manage = new Thread("Manage") {
+            public void run() {
 
-                while (isRunning){
+                while (isRunning) {
                     //managing
                 }
             }
@@ -47,21 +47,57 @@ public class Server implements Runnable {
     }
 
 
-    private void receive(){
-        receive = new Thread("Receive"){
-            public void run(){
-                while (isRunning){
-                byte[] data = new byte[1024];
+    private void receive() {
+        receive = new Thread("Receive") {
+            public void run() {
+                while (isRunning) {
+                    byte[] data = new byte[1024];
                     DatagramPacket packet = new DatagramPacket(data, data.length);
-                   try{ socket.receive(packet);
-                   } catch ( java.io.IOException e){
+                    try {
+                        socket.receive(packet);
+                    } catch (java.io.IOException e) {
 
-                   }
-
-                   String string = new String(packet.getData());
+                    }
+                    process(packet);
                 }
             }
         };
         receive.start();
+    }
+
+    private void sendToAll(String message) {
+        for (int i = 0; i < clients.size(); i++) {
+            ServerClient client = clients.get(i);
+            send(message.getBytes(), client.clientIPAddress, client.clientPort);
+        }
+    }
+
+    private void send(byte[] data, InetAddress address, int port) {
+        send = new Thread("Send") {
+            public void run() {
+                DatagramPacket packet = new DatagramPacket(data, data.length, address, port); // a packet is an analogy to a letter
+                try {
+                    socket.send(packet); //a socket is an analogy to the post office, so we use the socket to send our packets
+                } catch (java.io.IOException e) {
+
+                }
+            }
+        };
+        send.start();
+    }
+
+
+    private void process(DatagramPacket packet) {
+        String string = new String(packet.getData());
+
+        if (string.startsWith("/c/")) {
+            // UUID id = UUID.randomUUID(); //Universal Unique ID generator = an alternative for our Id generator
+            int id = UniqueIdentifier.getIdentifier();
+            clients.add(new ServerClient(string.substring(3, string.length()), packet.getAddress(), packet.getPort(), id));
+            System.out.println(string.substring(3, string.length()));
+        } else if (string.startsWith("/m/")) {
+            sendToAll(string);
+        } else
+            System.out.println(string);
     }
 }

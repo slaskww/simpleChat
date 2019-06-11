@@ -78,7 +78,7 @@ public class LoginGUI extends JFrame {
         setFont(lblIPAddressHint, FOREGROUND_COLOR);
         contentPane.add(lblIPAddressHint);
 
-        txtPort = new JTextField("1234");
+        txtPort = new JTextField("8012");
         txtPort.setBounds(65, 210, 160, 33);
         setFont(txtPort);
         contentPane.add(txtPort);
