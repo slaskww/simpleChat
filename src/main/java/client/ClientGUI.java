@@ -14,22 +14,24 @@ import java.util.Arrays;
 public class ClientGUI extends JFrame {
     private static final long serialVersionUID = 1L;
 
+    private DatagramSocket socket;
+
+    private String name;
+    private String serverIPAddress;
+    private int serverPort;
+    private InetAddress serverIP;
+    private Thread send;
+
     private JPanel clientPane;
     private JTextArea history;
     private JTextField txtMessage;
     private JButton btnSend;
     // private DefaultCaret caret;
-    private String name;
-    private String iPAddress;
-    private int port;
-    private DatagramSocket socket;
-    private InetAddress ip;
-    private Thread send;
 
     public ClientGUI(String name, String iPAddress, int port) {
         this.name = name;
-        this.iPAddress = iPAddress;
-        this.port = port;
+        this.serverIPAddress = iPAddress;
+        this.serverPort = port;
 
         boolean isConnected = openConnection(iPAddress);
         if (!isConnected) {
@@ -48,7 +50,7 @@ public class ClientGUI extends JFrame {
 
         try {
             socket = new DatagramSocket();
-            ip = InetAddress.getByName(address);
+            serverIP = InetAddress.getByName(address);
         } catch (SocketException | UnknownHostException e) {
             return false;
         }
@@ -73,7 +75,7 @@ public class ClientGUI extends JFrame {
 
         send = new Thread("Send") {
             public void run() {
-                DatagramPacket packet = new DatagramPacket(data, data.length, ip, port);
+                DatagramPacket packet = new DatagramPacket(data, data.length, serverIP, serverPort);
                 try {
                     socket.send(packet);
                 } catch (java.io.IOException e) {

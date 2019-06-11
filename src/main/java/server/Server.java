@@ -2,12 +2,16 @@ package src.main.java.server;
 
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public class Server implements Runnable {
 
-    private int port;
+    private List<ServerClient> clients = new ArrayList<>();
+
     private DatagramSocket socket;
+    private int port;
     private boolean isRunning = false;
     private Thread run, manage, receive, send;
 
@@ -55,7 +59,6 @@ public class Server implements Runnable {
                    }
 
                    String string = new String(packet.getData());
-                    System.out.println(string);
                 }
             }
         };
