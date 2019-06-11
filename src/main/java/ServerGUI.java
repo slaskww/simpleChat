@@ -2,7 +2,7 @@ package src.main.java;
 
 import javax.swing.*;
 
-public class ServerGUI{
+public class ServerGUI {
     private JPanel panel1;
     private JButton msg_send;
     private JTextArea msg_area;
@@ -12,7 +12,7 @@ public class ServerGUI{
 
     public static void main(String[] args) {
 
-        JFrame frame = new JFrame("Server");
+        JFrame frame = new JFrame("ServerGUI");
         frame.setContentPane(new ServerGUI().panel1);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();

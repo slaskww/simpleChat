@@ -8,10 +8,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.net.DatagramSocket;
-import java.net.InetAddress;
-import java.net.SocketException;
-import java.net.UnknownHostException;
+import java.net.*;
+import java.util.Arrays;
 
 public class ClientGUI extends JFrame {
     private static final long serialVersionUID = 1L;
@@ -26,33 +24,63 @@ public class ClientGUI extends JFrame {
     private int port;
     private DatagramSocket socket;
     private InetAddress ip;
+    private Thread send;
 
     public ClientGUI(String name, String iPAddress, int port) {
         this.name = name;
         this.iPAddress = iPAddress;
         this.port = port;
 
-        boolean isConnected = openConnection(iPAddress, port);
-        if (!isConnected){
+        boolean isConnected = openConnection(iPAddress);
+        if (!isConnected) {
 
             console("Connection failed!");
         }
 
         createWindow();
         console("Attempting a connection to " + iPAddress + ":" + port + ", user: " + name);
+        String connectionInfo = name + " connected from " + iPAddress + ":" +  port;
+        send(connectionInfo.getBytes());
     }
 
 
-    private boolean openConnection(String address, int port){
+    private boolean openConnection(String address) {
 
         try {
             socket = new DatagramSocket();
             ip = InetAddress.getByName(address);
-        } catch ( SocketException | UnknownHostException e){
+        } catch (SocketException | UnknownHostException e) {
             return false;
         }
 
         return true;
+    }
+
+    private String receive() {
+
+        byte[] data = new byte[1024];
+        DatagramPacket packet = new DatagramPacket(data, data.length); //cereived packet of data
+
+        try {
+            socket.receive(packet); //this method freezes our application (one thread) until our socket gets some data from the network ( receive() uses an infinite while loop)
+        } catch (java.io.IOException e) {
+
+        }
+        return Arrays.toString(packet.getData());
+    }
+
+    private void send(byte[] data) {
+
+        send = new Thread("Send") {
+            public void run() {
+                DatagramPacket packet = new DatagramPacket(data, data.length, ip, port);
+                try {
+                    socket.send(packet);
+                } catch (java.io.IOException e) {
+                }
+            }
+        };
+        send.start();
     }
 
     private void createWindow() {
@@ -106,7 +134,7 @@ public class ClientGUI extends JFrame {
             @Override
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-                    sent(txtMessage.getText());
+                    sendToConsole(txtMessage.getText());
                 }
             }
         });
@@ -118,7 +146,7 @@ public class ClientGUI extends JFrame {
         btnSend.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                sent(txtMessage.getText());
+                sendToConsole(txtMessage.getText());
             }
         });
         gbcBtnSent.insets = new Insets(0, 0, 0, 0);
@@ -135,14 +163,14 @@ public class ClientGUI extends JFrame {
         component.setFont(new Font("Consolas", Font.PLAIN, 16)); //style: 0=plain, 1=bold, 2= italic
     }
 
-    private void sent(String msg) {
+    private void sendToConsole(String msg) {
 
         if (msg.equals("")) {
             return;
         }
         msg = name + ":" + msg;
         console(msg);
-
+        send(msg.getBytes()); //we send our message to the server
         txtMessage.setText("");
     }
 
@@ -151,5 +179,6 @@ public class ClientGUI extends JFrame {
         history.setCaretPosition(history.getDocument().getLength()); //ustawia karetę (kursor) na końcu bloku tekstu, przydatne, jesli zeskrollujemy tekst i dodamy nową linie tekstu.
         // Karetka automatycznie przejsdzie na koniec bloku tekstu w history
     }
+
 
 }
