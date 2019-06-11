@@ -4,23 +4,12 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.text.JTextComponent;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.net.*;
-import java.util.Arrays;
 
 public class ClientGUI extends JFrame {
     private static final long serialVersionUID = 1L;
 
-    private DatagramSocket socket; //a socket is an analogy to the post office, so we use the socket to send our packets
-
-    private String name;
-    private String serverIPAddress;
-    private int serverPort;
-    private InetAddress serverIP;
-    private Thread send;
 
     private JPanel clientPane;
     private JTextArea history;
@@ -28,12 +17,13 @@ public class ClientGUI extends JFrame {
     private JButton btnSend;
     // private DefaultCaret caret;
 
-    public ClientGUI(String name, String iPAddress, int port) {
-        this.name = name;
-        this.serverIPAddress = iPAddress;
-        this.serverPort = port;
+    private Client client;
 
-        boolean isConnected = openConnection(iPAddress);
+    public ClientGUI(String name, String iPAddress, int port) {
+
+        client = new Client(name, iPAddress, port);
+
+        boolean isConnected = client.openConnection(iPAddress);
         if (!isConnected) {
 
             console("Connection failed!");
@@ -41,49 +31,10 @@ public class ClientGUI extends JFrame {
 
         createWindow();
         console("Attempting a connection to " + iPAddress + ":" + port + ", user: " + name);
-        String connectionInfo = "/c/" + name + " connected from " + iPAddress + ":" +  port;
-        send(connectionInfo.getBytes());
+        String connectionInfo = "/c/" + name + " connected from " + iPAddress + ":" + port;
+        client.send(connectionInfo.getBytes());
     }
 
-
-    private boolean openConnection(String address) {
-
-        try {
-            socket = new DatagramSocket(); //a socket is an analogy to the post office, so we use the socket to send our packets
-            serverIP = InetAddress.getByName(address);
-        } catch (SocketException | UnknownHostException e) {
-            return false;
-        }
-
-        return true;
-    }
-
-    private String receive() {
-
-        byte[] data = new byte[1024];
-        DatagramPacket packet = new DatagramPacket(data, data.length); //received a packet of data
-
-        try {
-            socket.receive(packet); //this method freezes our application (one thread) until our socket gets some data from the network ( receive() uses an infinite while loop)
-        } catch (java.io.IOException e) {
-
-        }
-        return Arrays.toString(packet.getData());
-    }
-
-    private void send(byte[] data) {
-
-        send = new Thread("Send") {
-            public void run() {
-                DatagramPacket packet = new DatagramPacket(data, data.length, serverIP, serverPort);  // a packet is an analogy to a letter
-                try {
-                    socket.send(packet); //a socket is an analogy to the post office, so we use the socket to send our packets
-                } catch (java.io.IOException e) {
-                }
-            }
-        };
-        send.start();
-    }
 
     private void createWindow() {
         try {
@@ -145,12 +96,7 @@ public class ClientGUI extends JFrame {
 
         btnSend = new JButton("Send");
         GridBagConstraints gbcBtnSent = new GridBagConstraints();
-        btnSend.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                sendToConsole(txtMessage.getText());
-            }
-        });
+        btnSend.addActionListener(e -> sendToConsole(txtMessage.getText()));
         gbcBtnSent.insets = new Insets(0, 0, 0, 0);
         gbcBtnSent.gridx = 2; //obiekt btnSend zostaje wrzucony do kolumny 3 (index 2)
         gbcBtnSent.gridy = 2; //obiekt btnSend zostaje wrzucony do wiersza 3 (index 2)
@@ -170,10 +116,10 @@ public class ClientGUI extends JFrame {
         if (msg.equals("")) {
             return;
         }
-        msg = name + ":" + msg;
+        msg = client.getClientName() + ":" + msg;
         console(msg);
         msg = "/m/" + msg;
-        send(msg.getBytes()); //we send our message to the server
+        client.send(msg.getBytes()); //we send our message to the server
         txtMessage.setText("");
     }
 

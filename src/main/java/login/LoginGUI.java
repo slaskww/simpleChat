@@ -1,5 +1,6 @@
 package src.main.java.login;
 
+import src.main.java.client.Client;
 import src.main.java.client.ClientGUI;
 
 import javax.swing.*;
