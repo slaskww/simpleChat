@@ -27,7 +27,8 @@ public class Server implements Runnable {
     }
 
     @Override
-    public void run() {
+    public void run() { //this method is called in separately executing thread. It is activated in the constructor
+
         isRunning = true;
         System.out.println("Server started on port " + port);
         manageClients();
@@ -77,7 +78,7 @@ public class Server implements Runnable {
             public void run() {
                 DatagramPacket packet = new DatagramPacket(data, data.length, address, port); // a packet is an analogy to a letter
                 try {
-                    socket.send(packet); //a socket is an analogy to the post office, so we use the socket to send our packets
+                    socket.send(packet); //a socket is an analogy to the post office, so we use the socket like the post office to send our packets
                 } catch (java.io.IOException e) {
 
                 }
@@ -86,14 +87,21 @@ public class Server implements Runnable {
         send.start();
     }
 
+    private void addPostfixAndSend(String msg, InetAddress address, int port){
+        msg += "/e/";
+        send(msg.getBytes(), address, port);
 
-    private void process(DatagramPacket packet) {
+    }
+
+    private void process(DatagramPacket packet) { //1. get the packet and process it depending on the prefix, 2. (optional) add a new client to the list and send him a confirmation 3. (opt.) send data from the packet to the clients from the list
         String string = new String(packet.getData());
 
         if (string.startsWith("/c/")) {
             // UUID id = UUID.randomUUID(); //Universal Unique ID generator = an alternative for our Id generator
             int id = UniqueIdentifier.getIdentifier();
             clients.add(new ServerClient(string.substring(3, string.length()), packet.getAddress(), packet.getPort(), id));
+            String ID = "/c/" + id;
+            addPostfixAndSend(ID, packet.getAddress(), packet.getPort());
             System.out.println(string.substring(3, string.length()));
         } else if (string.startsWith("/m/")) {
             sendToAll(string);

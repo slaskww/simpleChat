@@ -1,6 +1,5 @@
 package src.main.java.client;
 
-import javax.swing.*;
 import java.net.*;
 import java.util.Arrays;
 
@@ -8,6 +7,7 @@ public class Client {
     private static final long serialVersionUID = 1L;
 
     private DatagramSocket socket; //a socket is an analogy to the post office, so we use the socket to send our packets
+    private int ID = -1;
 
     private String name;
     private String serverIPAddress;
@@ -45,7 +45,8 @@ public class Client {
         } catch (java.io.IOException e) {
 
         }
-        return Arrays.toString(packet.getData());
+        String msg = new String(packet.getData());
+        return msg;
     }
 
     public void send(byte[] data) {
@@ -73,5 +74,13 @@ public class Client {
 
     public int getServerPort() {
         return serverPort;
+    }
+
+    public void setID(int ID) {
+        this.ID = ID;
+    }
+
+    public int getID() {
+        return ID;
     }
 }

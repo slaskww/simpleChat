@@ -1,5 +1,6 @@
 package src.main.java.client;
 
+import javax.sound.midi.Soundbank;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.text.JTextComponent;
@@ -7,7 +8,7 @@ import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
-public class ClientGUI extends JFrame {
+public class ClientGUI extends JFrame implements Runnable{
     private static final long serialVersionUID = 1L;
 
 
@@ -18,6 +19,10 @@ public class ClientGUI extends JFrame {
     // private DefaultCaret caret;
 
     private Client client;
+    private Thread listen, run;
+    private boolean isRunning = false;
+
+
 
     public ClientGUI(String name, String iPAddress, int port) {
 
@@ -31,8 +36,10 @@ public class ClientGUI extends JFrame {
 
         createWindow();
         console("Attempting a connection to " + iPAddress + ":" + port + ", user: " + name);
-        String connectionInfo = "/c/" + name + " connected from " + iPAddress + ":" + port;
-        client.send(connectionInfo.getBytes());
+        String connectionInfo = "/c/" + name; //message with the prefix '/c/'  is interpreted as a connecting message
+        client.send(connectionInfo.getBytes()); //send the packet to the server
+        run = new Thread(this, "Running");
+        run.start();
     }
 
 
@@ -118,7 +125,7 @@ public class ClientGUI extends JFrame {
         }
         msg = client.getClientName() + ":" + msg;
         console(msg);
-        msg = "/m/" + msg;
+        msg = "/m/" + msg; //message with the prefix '/m/'  is interpreted as a regular message
         client.send(msg.getBytes()); //we send our message to the server
         txtMessage.setText("");
     }
@@ -129,5 +136,30 @@ public class ClientGUI extends JFrame {
         // Karetka automatycznie przejsdzie na koniec bloku tekstu w history
     }
 
+    public void listen(){
 
+        listen = new Thread("Listen"){
+            public void run(){
+                while(isRunning){
+                 String msg = client.receive();
+                 if (msg.startsWith("/c/")){
+                     Integer ID = Integer.parseInt(msg.split("/c/|/e/")[1]);
+                   //  Integer ID = Integer.parseInt(msg.substring(3, 7));
+                     client.setID(ID);
+                     console("Successfully connected to server. ID: " + client.getID());
+                    }
+
+                }
+            }
+        };
+        listen.start();
+
+    }
+
+    @Override
+    public void run() { //this method is called in separately executing thread. It is activated in the constructor
+
+        isRunning = true;
+        listen();
+    }
 }
