@@ -123,9 +123,7 @@ public class ClientGUI extends JFrame implements Runnable{
         if (msg.equals("")) {
             return;
         }
-        msg = client.getClientName() + ":" + msg;
-        console(msg);
-        msg = "/m/" + msg; //message with the prefix '/m/'  is interpreted as a regular message
+        msg = "/m/" +  client.getClientName() + ":" + msg; //message with the '/m/' prefix is interpreted as a regular message
         client.send(msg.getBytes()); //we send our message to the server
         txtMessage.setText("");
     }
@@ -147,6 +145,9 @@ public class ClientGUI extends JFrame implements Runnable{
                    //  Integer ID = Integer.parseInt(msg.substring(3, 7));
                      client.setID(ID);
                      console("Successfully connected to server. ID: " + client.getID());
+                    } else if (msg.startsWith("/m/")){
+                        String text = msg.split("/m/|/e/")[1];
+                        console(text);
                     }
 
                 }
