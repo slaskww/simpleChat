@@ -10,7 +10,7 @@ public class Server implements Runnable {
 
     private List<ServerClient> clients = new ArrayList<>();
 
-    private DatagramSocket socket; //a socket is an analogy to the post office, so we use the socket to send our packets
+    private DatagramSocket socket; //a socket is an analogy to the post office, so we use the socket to sendToServer our packets
     private int port;
     private boolean isRunning = false;
     private Thread run, manage, receive, send;
@@ -78,7 +78,7 @@ public class Server implements Runnable {
             public void run() {
                 DatagramPacket packet = new DatagramPacket(data, data.length, address, port); // a packet is an analogy to a letter
                 try {
-                    socket.send(packet); //a socket is an analogy to the post office, so we use the socket like the post office to send our packets
+                    socket.send(packet); //a socket is an analogy to the post office, so we use the socket like the post office to sendToServer our packets
                 } catch (java.io.IOException e) {
 
                 }
@@ -93,7 +93,7 @@ public class Server implements Runnable {
 
     }
 
-    private void process(DatagramPacket packet) { //1. get the packet and process it depending on the prefix, 2. (optional) add a new client to the list and send him a confirmation 3. (opt.) send data from the packet to the clients from the list
+    private void process(DatagramPacket packet) { //1. get the packet and process it depending on the prefix, 2. (optional) add a new client to the list and sendToServer him a confirmation 3. (opt.) sendToServer data from the packet to the clients from the list
         String string = new String(packet.getData());
 
         if (string.startsWith("/c/")) {
@@ -105,7 +105,30 @@ public class Server implements Runnable {
             System.out.println(string.substring(3, string.length()));
         } else if (string.startsWith("/m/")) {
             sendToAll(string);
+        } else if (string.startsWith("/d/")) {
+            String id = string.split("/d/|/e/")[1];
+            disconnect(Integer.parseInt(id), true);
         } else
             System.out.println(string);
+    }
+
+    private void disconnect(int id, boolean disconnectionStatus){
+        ServerClient c = null;
+        for (int i = 0; i < clients.size(); i++){
+
+            if (clients.get(i).getClientID() == id){
+                c = clients.get(i);
+                clients.remove(i);
+                break;
+            }
+        }
+            String msg;
+
+            if (disconnectionStatus){
+                msg = "Client " + c.name + " (ID: " + c.getClientID() + ") @ " + c.clientIPAddress.toString() + ":" + c.clientPort + " disconnected.";
+            } else{
+                msg = "Client " + c.name + " (ID: " + c.getClientID() + ") @ " + c.clientIPAddress.toString() + ":" + c.clientPort + " timed out.";
+            }
+            System.out.println(msg);
     }
 }

@@ -1,12 +1,13 @@
 package src.main.java.client;
 
-import javax.sound.midi.Soundbank;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.text.JTextComponent;
 import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 public class ClientGUI extends JFrame implements Runnable{
     private static final long serialVersionUID = 1L;
@@ -37,7 +38,7 @@ public class ClientGUI extends JFrame implements Runnable{
         createWindow();
         console("Attempting a connection to " + iPAddress + ":" + port + ", user: " + name);
         String connectionInfo = "/c/" + name; //message with the prefix '/c/'  is interpreted as a connecting message
-        client.send(connectionInfo.getBytes()); //send the packet to the server
+        send(connectionInfo, false); //send the packet to the server
         run = new Thread(this, "Running");
         run.start();
     }
@@ -90,24 +91,35 @@ public class ClientGUI extends JFrame implements Runnable{
         gbcTxtMessage.gridy = 2; //obiekt txtMessage zostaje wrzucony do wiersza 3 (index 2)
         gbcTxtMessage.gridwidth = 2; //obiekt bedzie szeroki na dwie kolumny
         setFont(txtMessage);
+
         txtMessage.addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-                    sendToConsole(txtMessage.getText());
+                    send(txtMessage.getText(), true);
                 }
             }
         });
+
         clientPane.add(txtMessage, gbcTxtMessage);
         txtMessage.setColumns(10);
 
         btnSend = new JButton("Send");
         GridBagConstraints gbcBtnSent = new GridBagConstraints();
-        btnSend.addActionListener(e -> sendToConsole(txtMessage.getText()));
+        btnSend.addActionListener(e -> send(txtMessage.getText(), true));
         gbcBtnSent.insets = new Insets(0, 0, 0, 0);
         gbcBtnSent.gridx = 2; //obiekt btnSend zostaje wrzucony do kolumny 3 (index 2)
         gbcBtnSent.gridy = 2; //obiekt btnSend zostaje wrzucony do wiersza 3 (index 2)
         clientPane.add(btnSend, gbcBtnSent);
+
+        addWindowListener(new WindowAdapter() {
+            public void windowClosing(WindowEvent e) {
+                String disconnect = "/d/" + client.getID() + "/e/";
+                send(disconnect, false);
+                isRunning = false;
+                client.close();
+            }
+        });
 
         setVisible(true);
         txtMessage.requestFocusInWindow(); //kursor automatycznie zostaje umieszczony w polu txtMessage
@@ -118,14 +130,16 @@ public class ClientGUI extends JFrame implements Runnable{
         component.setFont(new Font("Consolas", Font.PLAIN, 16)); //style: 0=plain, 1=bold, 2= italic
     }
 
-    private void sendToConsole(String msg) {
+    private void send(String msg, boolean isMessageOrdinary) {
 
         if (msg.equals("")) {
             return;
         }
-        msg = "/m/" +  client.getClientName() + ":" + msg; //message with the '/m/' prefix is interpreted as a regular message
-        client.send(msg.getBytes()); //we send our message to the server
-        txtMessage.setText("");
+        if (isMessageOrdinary){
+            msg = "/m/" +  client.getClientName() + ":" + msg; //message with the '/m/' prefix is interpreted as a regular message
+            txtMessage.setText("");
+        }
+        client.sendToServer(msg.getBytes()); //we send our message to the server
     }
 
     public void console(String message) {
