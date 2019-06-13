@@ -1,6 +1,5 @@
 package src.main.java.login;
 
-import src.main.java.client.Client;
 import src.main.java.client.ClientGUI;
 
 import javax.swing.*;
@@ -22,7 +21,7 @@ public class LoginGUI extends JFrame {
     private JTextField txtPort;
     private JLabel lblPort;
     private JLabel lblPortHint;
-    private final Color FOREGROUND_COLOR = new Color(255,255,255);
+    private final Color FOREGROUND_COLOR = new Color(255, 255, 255);
 
     private JButton btnLogin;
 

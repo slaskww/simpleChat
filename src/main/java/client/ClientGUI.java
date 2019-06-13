@@ -160,9 +160,14 @@ public class ClientGUI extends JFrame implements Runnable{
                      client.setID(ID);
                      console("Successfully connected to server. ID: " + client.getID());
                     } else if (msg.startsWith("/m/")){
-                        String text = msg.split("/m/|/e/")[1];
+                        String text = msg.substring(3);
+                        text = text.split("/e/")[0];
+
                         console(text);
-                    }
+                    } else if (msg.startsWith("/i/")){
+                     String text = "/i/" +  client.getID() + "/e/";
+                     send(text, false);
+                 }
 
                 }
             }

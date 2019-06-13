@@ -19,7 +19,7 @@ public class ServerClient {
         this.clientID = ID;
     }
 
-    public int getClientID() {
+    public Integer getClientID() {
         return clientID;
     }
 }

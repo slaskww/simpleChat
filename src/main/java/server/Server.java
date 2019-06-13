@@ -9,6 +9,8 @@ import java.util.List;
 public class Server implements Runnable {
 
     private List<ServerClient> clients = new ArrayList<>();
+    private List<Integer> clientsResponse = new ArrayList<>();
+    private final int MAX_ATTEMPTS = 5; //max number of attempts to get response from a client
 
     private DatagramSocket socket; //a socket is an analogy to the post office, so we use the socket to sendToServer our packets
     private int port;
@@ -40,11 +42,33 @@ public class Server implements Runnable {
             public void run() {
 
                 while (isRunning) {
-                    //managing
+                    String msg = "/i/server";
+                    sendToAll(msg);
+                    try{
+                        Thread.sleep(1500);
+                    } catch (java.lang.InterruptedException e){
+
+                    }
+
+                    for (int i = 0; i < clients.size(); i++){
+                        ServerClient c = clients.get(i);
+                        if (!clientsResponse.contains(c.getClientID())){
+                            if (c.attempt > MAX_ATTEMPTS){
+                                disconnect(c.getClientID(), DisconnectionStatus.ABORT);
+                            } else {
+                                c.attempt++;
+                            }
+                        } else {
+                            clientsResponse.remove(c.getClientID());
+                            c.attempt = 0;
+                        }
+                    }
+
                 }
             }
         };
         manage.start();
+
     }
 
 
@@ -107,16 +131,19 @@ public class Server implements Runnable {
             sendToAll(string);
         } else if (string.startsWith("/d/")) {
             String id = string.split("/d/|/e/")[1];
-            disconnect(Integer.parseInt(id), true);
+            disconnect(Integer.parseInt(id), DisconnectionStatus.QUIT);
+        } else if (string.startsWith("/i/")) {
+            String id = string.split("/i/|/e/")[1];
+            clientsResponse.add(Integer.parseInt(id));
         } else
             System.out.println(string);
     }
 
-    private void disconnect(int id, boolean disconnectionStatus){
+    private void disconnect(int clientId, DisconnectionStatus disconnectionStatus){
         ServerClient c = null;
         for (int i = 0; i < clients.size(); i++){
 
-            if (clients.get(i).getClientID() == id){
+            if (clients.get(i).getClientID() == clientId){
                 c = clients.get(i);
                 clients.remove(i);
                 break;
@@ -124,7 +151,7 @@ public class Server implements Runnable {
         }
             String msg;
 
-            if (disconnectionStatus){
+            if (disconnectionStatus == DisconnectionStatus.QUIT){
                 msg = "Client " + c.name + " (ID: " + c.getClientID() + ") @ " + c.clientIPAddress.toString() + ":" + c.clientPort + " disconnected.";
             } else{
                 msg = "Client " + c.name + " (ID: " + c.getClientID() + ") @ " + c.clientIPAddress.toString() + ":" + c.clientPort + " timed out.";
