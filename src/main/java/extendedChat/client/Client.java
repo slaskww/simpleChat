@@ -1,7 +1,6 @@
-package src.main.java.client;
+package src.main.java.extendedChat.client;
 
 import java.net.*;
-import java.util.Arrays;
 
 public class Client {
     private static final long serialVersionUID = 1L;

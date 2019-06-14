@@ -1,4 +1,4 @@
-package src.main.java.client;
+package src.main.java.extendedChat.client;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;

@@ -1,4 +1,4 @@
-package src.main.java.login;
+package src.main.java.extendedChat.login;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;

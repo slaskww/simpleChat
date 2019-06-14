@@ -1,4 +1,4 @@
-package src.main.java.server;
+package src.main.java.extendedChat.server;
 
 public enum DisconnectionStatus {
 

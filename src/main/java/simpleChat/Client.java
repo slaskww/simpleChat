@@ -1,6 +1,4 @@
-package src.main.java;
-
-import src.main.java.ChatServer;
+package src.main.java.simpleChat;
 
 import java.io.IOException;
 import java.io.PrintWriter;

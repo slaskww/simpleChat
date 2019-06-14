@@ -1,4 +1,4 @@
-package src.main.java;
+package src.main.java.simpleChat;
 
 import java.net.Socket;
 import java.util.Scanner;

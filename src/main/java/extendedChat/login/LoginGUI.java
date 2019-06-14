@@ -1,6 +1,6 @@
-package src.main.java.login;
+package src.main.java.extendedChat.login;
 
-import src.main.java.client.ClientGUI;
+import src.main.java.extendedChat.client.*;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;

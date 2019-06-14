@@ -1,10 +1,11 @@
-package src.main.java.server;
+package src.main.java.extendedChat.server;
 
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 public class Server implements Runnable {
 
@@ -16,6 +17,7 @@ public class Server implements Runnable {
     private int port;
     private boolean isRunning = false;
     private Thread run, manage, receive, send;
+    private boolean rawMsg= false; // this flag allows the server to see the actual packets of everything
 
     public Server(int port) {
         this.port = port;
@@ -33,8 +35,37 @@ public class Server implements Runnable {
 
         isRunning = true;
         System.out.println("Server started on port " + port);
-        manageClients();
-        receive();
+        manageClients(); //this method is in its own thread (reason? it has an internal while infinite loop, which could freeze the entire chat)
+        receive(); //this method is in its own thread (reason? it has an internal while infinite loop, which could freeze the entire chat
+
+        Scanner serverInput = new Scanner(System.in);
+        String text;
+        while(isRunning){
+            text = serverInput.nextLine();
+
+        if (!text.startsWith("/")){ //if text from server input is not a special command, send that text as an ordinary message to all clients
+            text = "/m/Server: " + text + "/e/";
+            sendToAll(text);
+            continue; //it breaks the current iteration in the loop and carry on with the next iteration in the loop
+        }
+
+        if (text.equals("/raw")){
+            rawMsg = !rawMsg;
+            continue; //it breaks the current iteration in the loop and carry on with the next iteration in the loop
+        }
+
+        if (text.equals("/clients")){
+            System.out.println("Clients:");
+            System.out.println("========");
+            for (int i = 0; i < clients.size(); i++){
+                ServerClient c = clients.get(i);
+                System.out.format("%s(%d)\t%s:%d\n", c.name, c.getClientID(), c.clientIPAddress.toString(), c.clientPort);
+            }
+            System.out.println("========");
+
+
+            }
+        }
     }
 
     private void manageClients() {
@@ -91,6 +122,14 @@ public class Server implements Runnable {
     }
 
     private void sendToAll(String message) {
+
+
+        if (message.startsWith("/m/")){
+            String text = message.substring(3);
+            text = text.split("/e/")[0];
+            System.out.println(text);
+        }
+
         for (int i = 0; i < clients.size(); i++) {
             ServerClient client = clients.get(i);
             send(message.getBytes(), client.clientIPAddress, client.clientPort);
@@ -119,6 +158,10 @@ public class Server implements Runnable {
 
     private void process(DatagramPacket packet) { //1. get the packet and process it depending on the prefix, 2. (optional) add a new client to the list and sendToServer him a confirmation 3. (opt.) sendToServer data from the packet to the clients from the list
         String string = new String(packet.getData());
+
+        if (rawMsg) { // if rawMsg is true, print all packets (with prefixes)
+            System.out.println(string);
+        }
 
         if (string.startsWith("/c/")) {
             // UUID id = UUID.randomUUID(); //Universal Unique ID generator = an alternative for our Id generator

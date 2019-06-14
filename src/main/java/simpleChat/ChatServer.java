@@ -1,4 +1,4 @@
-package src.main.java;
+package src.main.java.simpleChat;
 
 import java.io.PrintWriter;
 import java.net.InetAddress;
