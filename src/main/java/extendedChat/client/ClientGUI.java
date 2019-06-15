@@ -37,7 +37,7 @@ public class ClientGUI extends JFrame implements Runnable{
 
         createWindow();
         console("Attempting a connection to " + iPAddress + ":" + port + ", user: " + name);
-        String connectionInfo = "/c/" + name; //message with the prefix '/c/'  is interpreted as a connecting message
+        String connectionInfo = "/c/" + name + "/e/"; //message with the prefix '/c/'  is interpreted as a connecting message
         send(connectionInfo, false); //send the packet to the server
         run = new Thread(this, "Running");
         run.start();

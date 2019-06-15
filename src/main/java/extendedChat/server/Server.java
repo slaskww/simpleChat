@@ -62,9 +62,57 @@ public class Server implements Runnable {
                 System.out.format("%s(%d)\t%s:%d\n", c.name, c.getClientID(), c.clientIPAddress.toString(), c.clientPort);
             }
             System.out.println("========");
+            continue; //it breaks the current iteration in the loop and carry on with the next iteration in the loop
+        }
 
+        if (text.startsWith("/kick")){
 
+            if (text.equals("/kick")){continue;} //it prevents from Exception in thread "Server" java.lang.ArrayIndexOutOfBoundsException
+
+            String name = text.split(" ")[1];
+            String banInfo = "";
+            boolean number = true;
+            boolean exists = false;
+            Integer id = -1;
+
+            try{
+              id = Integer.parseInt(name);
+            } catch(NumberFormatException e){
+                number = false;
             }
+            if (number){
+
+                for (int i = 0; i < clients.size(); i++){
+                    if (clients.get(i).clientID == id){
+                        exists = true;
+                        banInfo = "/m/Server: client " + clients.get(i).name + "(" + clients.get(i).clientID + ") was banned!";
+
+                        break;
+                    }
+                }
+                if (exists){
+
+                    sendToAll(banInfo);
+                    disconnect(id, DisconnectionStatus.QUIT);
+                } else {
+                    System.out.println("Client " + id + " does not exist. Check the ID number!");
+                }
+            } else {
+                for (int i = 0; i < clients.size(); i++){
+                   if  (clients.get(i).name.equals(name)){
+                       exists = true;
+                       banInfo = "/m/Server: client " + clients.get(i).name + "(" + clients.get(i).clientID + ") was banned!";
+                       sendToAll(banInfo);
+                       disconnect(clients.get(i).clientID, DisconnectionStatus.QUIT);
+                       break;
+                   }
+                }
+                if (!exists){
+                    System.out.println("Client " + name + " does not exist. Check client's name!");
+                }
+            }
+
+        }
         }
     }
 
@@ -166,10 +214,11 @@ public class Server implements Runnable {
         if (string.startsWith("/c/")) {
             // UUID id = UUID.randomUUID(); //Universal Unique ID generator = an alternative for our Id generator
             int id = UniqueIdentifier.getIdentifier();
-            clients.add(new ServerClient(string.substring(3, string.length()), packet.getAddress(), packet.getPort(), id));
-            String ID = "/c/" + id;
+            String name = string.split("/c/|/e/")[1];
+            clients.add(new ServerClient(name, packet.getAddress(), packet.getPort(), id));
+            String ID = "/c/" + id ;
             addPostfixAndSend(ID, packet.getAddress(), packet.getPort());
-            System.out.println(string.substring(3, string.length()));
+            System.out.println(name + "(" + id + ") connected!");
         } else if (string.startsWith("/m/")) {
             sendToAll(string);
         } else if (string.startsWith("/d/")) {
@@ -184,14 +233,19 @@ public class Server implements Runnable {
 
     private void disconnect(int clientId, DisconnectionStatus disconnectionStatus){
         ServerClient c = null;
+        boolean disconnected = false;
         for (int i = 0; i < clients.size(); i++){
 
             if (clients.get(i).getClientID() == clientId){
                 c = clients.get(i);
                 clients.remove(i);
+                disconnected = true;
                 break;
             }
         }
+
+        if (!disconnected){return;} //if disconnected != true it means that a client who had been kicked, quited its chat window
+
             String msg;
 
             if (disconnectionStatus == DisconnectionStatus.QUIT){
