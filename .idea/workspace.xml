@@ -4,7 +4,7 @@
     <list default="true" id="d9e3c446-846e-429d-934b-01a78b19e8ca" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/extendedChat/client/ClientGUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/extendedChat/client/ClientGUI.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/extendedChat/server/Server.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/extendedChat/server/Server.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/extendedChat/login/LoginGUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/extendedChat/login/LoginGUI.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <ignored path="$PROJECT_DIR$/target/" />
@@ -36,8 +36,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/extendedChat/login/LoginGUI.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="531">
-              <caret line="127" column="48" lean-forward="true" selection-start-line="127" selection-start-column="48" selection-end-line="127" selection-end-column="48" />
+            <state relative-caret-position="280">
+              <caret line="54" column="38" selection-start-line="54" selection-start-column="38" selection-end-line="54" selection-end-column="38" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -57,8 +57,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/extendedChat/server/Server.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="415">
-              <caret line="243" column="107" lean-forward="true" selection-start-line="243" selection-start-column="107" selection-end-line="243" selection-end-column="107" />
+            <state relative-caret-position="-192">
+              <caret line="78" column="42" selection-start-line="78" selection-start-column="42" selection-end-line="78" selection-end-column="42" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -69,10 +69,25 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/extendedChat/client/ClientGUI.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-132">
-              <caret line="134" column="29" lean-forward="true" selection-start-line="134" selection-start-column="29" selection-end-line="134" selection-end-column="29" />
+            <state relative-caret-position="415">
+              <caret line="199" column="13" lean-forward="true" selection-start-line="199" selection-start-column="13" selection-end-line="199" selection-end-column="13" />
               <folding>
                 <element signature="imports" expanded="true" />
+                <element signature="e#2167#2168#0" expanded="true" />
+                <element signature="e#2203#2204#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/extendedChat/client/OnlineUsers.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="497">
+              <caret line="36" column="39" lean-forward="true" selection-start-line="36" selection-start-column="39" selection-end-line="36" selection-end-column="39" />
+              <folding>
+                <element signature="imports" expanded="true" />
+                <element signature="e#1274#1275#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -81,7 +96,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="jar://C:/Java/jdk1.8.0_201/src.zip!/java/lang/Integer.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="233">
+            <state relative-caret-position="9860">
               <caret line="613" column="69" selection-start-line="613" selection-start-column="48" selection-end-line="613" selection-end-column="69" />
             </state>
           </provider>
@@ -92,8 +107,8 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="Class" />
         <option value="Enum" />
+        <option value="Class" />
       </list>
     </option>
   </component>
@@ -124,15 +139,16 @@
         <option value="$PROJECT_DIR$/src/main/java/simpleChat/ChatClientHandler.java" />
         <option value="$PROJECT_DIR$/src/main/simpleChat/Client.java" />
         <option value="$PROJECT_DIR$/src/main/java/simpleChat/Client.java" />
-        <option value="$PROJECT_DIR$/src/main/java/extendedChat/login/LoginGUI.java" />
-        <option value="$PROJECT_DIR$/src/main/java/extendedChat/client/ClientGUI.java" />
         <option value="$PROJECT_DIR$/src/main/java/extendedChat/server/Server.java" />
+        <option value="$PROJECT_DIR$/src/main/java/extendedChat/login/LoginGUI.java" />
+        <option value="$PROJECT_DIR$/src/main/java/extendedChat/client/OnlineUsers.java" />
+        <option value="$PROJECT_DIR$/src/main/java/extendedChat/client/ClientGUI.java" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="625" />
-    <option name="y" value="8" />
+    <option name="x" value="542" />
+    <option name="y" value="1" />
     <option name="width" value="1936" />
     <option name="height" value="1056" />
   </component>
@@ -142,6 +158,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="PackagesPane" />
       <pane id="ProjectPane">
         <subPane>
@@ -207,7 +224,6 @@
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -216,7 +232,7 @@
     <property name="GenerateAntBuildDialog.forceTargetJdk" value="true" />
     <property name="GenerateAntBuildDialog.outputFileNameProperty" value="plchat" />
     <property name="UI_DESIGNER_EDITOR_MODE.UIDesignerToolWindowManager.STATE" value="left" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1560634671822" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1560894825809" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/../Wzorce projektowe/NI" />
     <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.15" />
@@ -297,8 +313,8 @@
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Application.ServerMain" />
         <item itemvalue="Application.LoginGUI" />
+        <item itemvalue="Application.ServerMain" />
         <item itemvalue="Application.ServerMain" />
       </list>
     </recent_temporary>
@@ -329,7 +345,7 @@
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.4992636" visible="true" weight="0.23560767" />
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.4992636" visible="true" weight="0.28944564" />
       <window_info id="Structure" order="1" sideWeight="0.50073636" side_tool="true" weight="0.22228146" />
       <window_info id="Designer" order="2" />
       <window_info id="Favorites" order="3" sideWeight="0.50073636" side_tool="true" weight="0.22228146" />
@@ -344,7 +360,7 @@
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" sideWeight="0.4989339" weight="0.32936078" />
-      <window_info anchor="bottom" id="Terminal" order="7" sideWeight="0.5586354" weight="0.21451788" />
+      <window_info anchor="bottom" id="Terminal" order="7" sideWeight="0.5586354" weight="0.2654388" />
       <window_info anchor="bottom" id="Event Log" order="8" sideWeight="0.5165245" side_tool="true" weight="0.26218852" />
       <window_info anchor="bottom" id="Version Control" order="9" sideWeight="0.49946696" weight="0.32936078" />
       <window_info anchor="bottom" id="Messages" order="10" sideWeight="0.49626866" weight="0.32936078" />
@@ -595,8 +611,55 @@
     </entry>
     <entry file="jar://C:/Java/jdk1.8.0_201/src.zip!/java/lang/Integer.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="233">
+        <state relative-caret-position="9860">
           <caret line="613" column="69" selection-start-line="613" selection-start-column="48" selection-end-line="613" selection-end-column="69" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://C:/Java/jdk1.8.0_201/src.zip!/java/awt/GridBagLayout.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="319">
+          <caret line="467" column="18" selection-start-line="467" selection-start-column="18" selection-end-line="467" selection-end-column="18" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/extendedChat/login/LoginGUI.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="280">
+          <caret line="54" column="38" selection-start-line="54" selection-start-column="38" selection-end-line="54" selection-end-column="38" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://C:/Java/jdk1.8.0_201/javafx-src.zip!/javafx/scene/control/MenuBar.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="218">
+          <caret line="75" column="13" selection-start-line="75" selection-start-column="13" selection-end-line="75" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/extendedChat/client/OnlineUsers.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="497">
+          <caret line="36" column="39" lean-forward="true" selection-start-line="36" selection-start-column="39" selection-end-line="36" selection-end-column="39" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#1274#1275#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/extendedChat/client/ClientGUI.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="415">
+          <caret line="199" column="13" lean-forward="true" selection-start-line="199" selection-start-column="13" selection-end-line="199" selection-end-column="13" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#2167#2168#0" expanded="true" />
+            <element signature="e#2203#2204#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -607,30 +670,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/extendedChat/login/LoginGUI.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="531">
-          <caret line="127" column="48" lean-forward="true" selection-start-line="127" selection-start-column="48" selection-end-line="127" selection-end-column="48" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/extendedChat/client/ClientGUI.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-132">
-          <caret line="134" column="29" lean-forward="true" selection-start-line="134" selection-start-column="29" selection-end-line="134" selection-end-column="29" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/extendedChat/server/Server.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="415">
-          <caret line="243" column="107" lean-forward="true" selection-start-line="243" selection-start-column="107" selection-end-line="243" selection-end-column="107" />
+        <state relative-caret-position="-192">
+          <caret line="78" column="42" selection-start-line="78" selection-start-column="42" selection-end-line="78" selection-end-column="42" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>

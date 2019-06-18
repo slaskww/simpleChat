@@ -1,13 +1,11 @@
 package src.main.java.extendedChat.client;
 
+
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.text.JTextComponent;
 import java.awt.*;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
+import java.awt.event.*;
 
 public class ClientGUI extends JFrame implements Runnable{
     private static final long serialVersionUID = 1L;
@@ -22,6 +20,7 @@ public class ClientGUI extends JFrame implements Runnable{
     private Client client;
     private Thread listen, run;
     private boolean isRunning = false;
+    private OnlineUsers users;
 
 
 
@@ -39,6 +38,7 @@ public class ClientGUI extends JFrame implements Runnable{
         console("Attempting a connection to " + iPAddress + ":" + port + ", user: " + name);
         String connectionInfo = "/c/" + name + "/e/"; //message with the prefix '/c/'  is interpreted as a connecting message
         send(connectionInfo, false); //send the packet to the server
+        users = new OnlineUsers();
         run = new Thread(this, "Running");
         run.start();
     }
@@ -55,6 +55,25 @@ public class ClientGUI extends JFrame implements Runnable{
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(880, 550);
         setLocationRelativeTo(null); /// If the component is null , the window is placed in the center of the screen
+
+        JMenuBar menuBar = new JMenuBar();
+        setJMenuBar(menuBar);
+
+        JMenu mnFile = new JMenu("Menu");
+        menuBar.add(mnFile);
+
+        JMenuItem jMenuItemOnlineUsers = new JMenuItem("Online clients");
+        jMenuItemOnlineUsers.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                users.setVisible(true);
+            }
+        });
+        mnFile.add(jMenuItemOnlineUsers);
+
+        JMenuItem jMenuItemExit = new JMenuItem("Exit");
+        mnFile.add(jMenuItemExit);
+
         clientPane = new JPanel();
         clientPane.setBorder(new EmptyBorder(5, 5, 5, 5));
         clientPane.setLayout(new BorderLayout(0, 0));
@@ -63,9 +82,8 @@ public class ClientGUI extends JFrame implements Runnable{
         //  add(clientPane); //alternative way to add this child to the LFrame
         GridBagLayout gblContentPane = new GridBagLayout(); //tworzymy siatke o wymiarach 4 x 3
         gblContentPane.columnWidths = new int[]{28, 815, 30, 7}; //cztery kolumny o indeksach 0..3
-        gblContentPane.rowHeights = new int[]{35, 475, 40}; //trzy wiersze o indeksach 0..2
-        gblContentPane.columnWeights = new double[]{1.0, 1.0};
-        gblContentPane.rowWeights = new double[]{1.0, Double.MIN_VALUE};
+        gblContentPane.rowHeights = new int[]{25, 485, 40}; //trzy wiersze o indeksach 0..2
+
         clientPane.setLayout(gblContentPane);
 
         history = new JTextArea();
@@ -79,6 +97,8 @@ public class ClientGUI extends JFrame implements Runnable{
         scrollConstraints.gridy = 0; //obiekt history zostaje wrzucony do wiersza 1 (index 0)
         scrollConstraints.gridwidth = 3; //obiekt bedzie szeroki na 3 kolumny
         scrollConstraints.gridheight = 2; //obiekt bedzie wysoki na 2 wiersze
+        scrollConstraints.weightx = 1; //wartosc 1 pozwala nam na zmianę szerokości pola history wraz ze zmiana szerokosci okna
+        scrollConstraints.weighty = 1; //wartosc 1 pozwala nam na zmianę dlugosci pola history wraz ze zmianą dlugosci okna
         scrollConstraints.insets = new Insets(15, 5, 0, 0);
         setFont(history);
         clientPane.add(scrollPane, scrollConstraints);
@@ -90,6 +110,8 @@ public class ClientGUI extends JFrame implements Runnable{
         gbcTxtMessage.gridx = 0; //obiekt txtMessage zostaje wrzucony do kolumny 1 (index 0)
         gbcTxtMessage.gridy = 2; //obiekt txtMessage zostaje wrzucony do wiersza 3 (index 2)
         gbcTxtMessage.gridwidth = 2; //obiekt bedzie szeroki na dwie kolumny
+        gbcTxtMessage.weightx = 1; //wartosc 1 pozwala nam na zmianę szerokości pola txtMessage wraz ze zmiana szerokosci okna
+        gbcTxtMessage.weighty = 0; //wartosc 0 sprawia, ze pole nie zmieni swojej dlugosci wraz ze zmianą dlugosci okna
         setFont(txtMessage);
 
         txtMessage.addKeyListener(new KeyAdapter() {
@@ -110,6 +132,8 @@ public class ClientGUI extends JFrame implements Runnable{
         gbcBtnSent.insets = new Insets(0, 0, 0, 0);
         gbcBtnSent.gridx = 2; //obiekt btnSend zostaje wrzucony do kolumny 3 (index 2)
         gbcBtnSent.gridy = 2; //obiekt btnSend zostaje wrzucony do wiersza 3 (index 2)
+        gbcBtnSent.weightx = 0; //wartosc 0 sprawia, ze button nie zmieni swojej szerokosci wraz ze zmianą szerokosci okna
+        gbcBtnSent.weighty = 0; //wartosc 0 sprawia, ze button nie zmieni swojej dlugosci wraz ze zmianą dlugosci okna
         clientPane.add(btnSend, gbcBtnSent);
 
         addWindowListener(new WindowAdapter() {
@@ -167,7 +191,10 @@ public class ClientGUI extends JFrame implements Runnable{
                     } else if (msg.startsWith("/i/")){
                      String text = "/i/" +  client.getID() + "/e/";
                      send(text, false);
-                 }
+                 } else if (msg.startsWith("/u/")){
+                     String[] u = msg.split("/u/|/n/|/e/");
+                     users.update(u);
+                    }
 
                 }
             }

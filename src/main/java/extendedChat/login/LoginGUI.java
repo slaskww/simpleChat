@@ -52,7 +52,7 @@ public class LoginGUI extends JFrame {
 
         contentPane.setLayout(null); //ustawiamy absoluteLayout - for any window, that does not need to be resizeable
 
-        txtName = new JTextField("");
+        txtName = new JTextField("Luke");
         txtName.setBounds(65, 50, 160, 33);
         setFont(txtName);
         contentPane.add(txtName);
