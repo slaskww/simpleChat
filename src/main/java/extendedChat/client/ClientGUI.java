@@ -6,6 +6,7 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.text.JTextComponent;
 import java.awt.*;
 import java.awt.event.*;
+import java.util.Arrays;
 
 public class ClientGUI extends JFrame implements Runnable{
     private static final long serialVersionUID = 1L;
@@ -59,6 +60,7 @@ public class ClientGUI extends JFrame implements Runnable{
         JMenuBar menuBar = new JMenuBar();
         setJMenuBar(menuBar);
 
+
         JMenu mnFile = new JMenu("Menu");
         menuBar.add(mnFile);
 
@@ -73,6 +75,12 @@ public class ClientGUI extends JFrame implements Runnable{
 
         JMenuItem jMenuItemExit = new JMenuItem("Exit");
         mnFile.add(jMenuItemExit);
+        jMenuItemExit.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.exit(0); //to terminate client's window
+            }
+        });
 
         clientPane = new JPanel();
         clientPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -193,7 +201,8 @@ public class ClientGUI extends JFrame implements Runnable{
                      send(text, false);
                  } else if (msg.startsWith("/u/")){
                      String[] u = msg.split("/u/|/n/|/e/");
-                     users.update(u);
+                     String[] trimmedArrayOfUsers = Arrays.copyOfRange(u,1, u.length -1); //this method trims initial and final spaces
+                     users.update(trimmedArrayOfUsers);
                     }
 
                 }

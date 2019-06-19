@@ -123,6 +123,7 @@ public class Server implements Runnable {
                 while (isRunning) {
                     String msg = "/i/server";
                     sendToAll(msg);
+                    sendStatus();
                     try{
                         Thread.sleep(1500);
                     } catch (java.lang.InterruptedException e){
@@ -148,6 +149,23 @@ public class Server implements Runnable {
         };
         manage.start();
 
+    }
+
+    private void sendStatus(){ //send to the client the logins of all active users
+        if (clients.size() == 0){
+            return;
+        }
+
+        StringBuilder users = new StringBuilder("/u/");
+
+        for (int i = 0; i < clients.size() - 1; i++){
+
+            users.append(clients.get(i).name).append("/n/");
+        }
+
+        users.append(clients.get(clients.size()-1).name).append("/e/");
+
+        sendToAll(users.toString());
     }
 
 
