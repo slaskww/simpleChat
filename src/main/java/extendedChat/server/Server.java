@@ -49,12 +49,26 @@ public class Server implements Runnable {
             continue; //it breaks the current iteration in the loop and carry on with the next iteration in the loop
         }
 
-        if (text.equals("/raw")){
+        else if (text.equals("/raw")){
+
+            if (!rawMsg) {
+                System.out.println("Raw mode is on");
+            } else {
+                System.out.println("Raw mode is off.");
+            }
             rawMsg = !rawMsg;
             continue; //it breaks the current iteration in the loop and carry on with the next iteration in the loop
         }
 
-        if (text.equals("/clients")){
+        else if (text.equals("/quit")){
+            quit();
+        }
+
+        else if (text.equals("/help")){
+            printHelp();
+        }
+
+        else if (text.equals("/clients")){
             System.out.println("Clients:");
             System.out.println("========");
             for (int i = 0; i < clients.size(); i++){
@@ -65,7 +79,7 @@ public class Server implements Runnable {
             continue; //it breaks the current iteration in the loop and carry on with the next iteration in the loop
         }
 
-        if (text.startsWith("/kick")){
+        else if (text.startsWith("/kick")){
 
             if (text.equals("/kick")){continue;} //it prevents from Exception in thread "Server" java.lang.ArrayIndexOutOfBoundsException
 
@@ -112,8 +126,12 @@ public class Server implements Runnable {
                 }
             }
 
+        } else {
+            System.out.println("Unknown command!");
+            printHelp();
         }
         }
+        serverInput.close(); //close a scanner
     }
 
     private void manageClients() {
@@ -122,10 +140,10 @@ public class Server implements Runnable {
 
                 while (isRunning) {
                     String msg = "/i/server";
-                    sendToAll(msg);
-                    sendStatus();
+                    sendToAll(msg); //sends a kind of ping to each of the clients
+                    sendStatus(); //sends the list of the clients
                     try{
-                        Thread.sleep(1500);
+                        Thread.sleep(3000);
                     } catch (java.lang.InterruptedException e){
 
                     }
@@ -273,4 +291,29 @@ public class Server implements Runnable {
             }
             System.out.println(msg);
     }
+
+
+    private void quit(){
+
+        for (int i = 0; i < clients.size(); i++){
+            disconnect(clients.get(i).clientID, DisconnectionStatus.QUIT);
+        }
+        System.out.println("Server disconnected.");
+        isRunning = false;
+        socket.close();
+    }
+
+    private void printHelp(){
+
+        System.out.println("This is a list of available server commands:");
+        System.out.println("============================================");
+        System.out.println("/raw  -- enables raw mode");
+        System.out.println("/clients -- shows all connected clients");
+        System.out.println("/kick[user ID or user name] -- kicks a client");
+        System.out.println("/help -- shows a help message");
+        System.out.println("/quit -- shuts down the server\n");
+
+
+    }
+
 }

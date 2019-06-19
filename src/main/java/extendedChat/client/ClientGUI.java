@@ -168,7 +168,7 @@ public class ClientGUI extends JFrame implements Runnable{
             return;
         }
         if (isMessageOrdinary){
-            msg = "/m/" +  client.getClientName() + ":" + msg; //message with the '/m/' prefix is interpreted as a regular message
+            msg = "/m/" +  client.getClientName() + ":" + msg + "/e/"; //message with the '/m/' prefix is interpreted as a regular message
             txtMessage.setText("");
         }
         client.sendToServer(msg.getBytes()); //we send our message to the server
