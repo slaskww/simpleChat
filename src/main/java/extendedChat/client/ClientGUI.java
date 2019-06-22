@@ -8,7 +8,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.util.Arrays;
 
-public class ClientGUI extends JFrame implements Runnable{
+public class ClientGUI extends JFrame implements Runnable, ComponentListener{ //ComponentListener interface  allows to attach an OnlineUsers object to 'this' object
     private static final long serialVersionUID = 1L;
 
 
@@ -39,7 +39,8 @@ public class ClientGUI extends JFrame implements Runnable{
         console("Attempting a connection to " + iPAddress + ":" + port + ", user: " + name);
         String connectionInfo = "/c/" + name + "/e/"; //message with the prefix '/c/'  is interpreted as a connecting message
         send(connectionInfo, false); //send the packet to the server
-        users = new OnlineUsers();
+        addComponentListener(this); //this method attaches OnlineUsers object to this object
+        users = new OnlineUsers(this);
         run = new Thread(this, "Running");
         run.start();
     }
@@ -217,5 +218,28 @@ public class ClientGUI extends JFrame implements Runnable{
 
         isRunning = true;
         listen();
+    }
+
+    @Override
+    public void componentResized(ComponentEvent e) {
+
+    }
+
+    @Override
+    public void componentMoved(ComponentEvent e) {
+        int x = this.getX() - users.getWidth();
+        int y = this.getY();
+
+        users.setDialogLocation(x, y);
+    }
+
+    @Override
+    public void componentShown(ComponentEvent e) {
+
+    }
+
+    @Override
+    public void componentHidden(ComponentEvent e) {
+
     }
 }

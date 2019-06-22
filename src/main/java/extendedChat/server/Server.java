@@ -178,10 +178,10 @@ public class Server implements Runnable {
 
         for (int i = 0; i < clients.size() - 1; i++){
 
-            users.append(clients.get(i).name).append("/n/");
+            users.append("~"+clients.get(i).name).append("/n/");
         }
 
-        users.append(clients.get(clients.size()-1).name).append("/e/");
+        users.append("~"+clients.get(clients.size()-1).name).append("/e/");
 
         sendToAll(users.toString());
     }

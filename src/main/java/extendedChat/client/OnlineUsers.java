@@ -4,12 +4,13 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 
+
 public class OnlineUsers extends JFrame {
 
     private JPanel contentPane;
     private JList list;
 
-    public OnlineUsers(){
+    public OnlineUsers(JFrame jFrame){
 
         setType(Type.UTILITY);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -19,7 +20,6 @@ public class OnlineUsers extends JFrame {
         contentPane = new JPanel();
         contentPane.setBorder(new EmptyBorder(10, 8, 8, 8));
         setContentPane(contentPane);
-
         GridBagLayout gridBagLayoutContentPane = new GridBagLayout();
         gridBagLayoutContentPane.columnWidths = new int[]{0,0};
         gridBagLayoutContentPane.rowHeights = new int[]{0,0};
@@ -36,11 +36,16 @@ public class OnlineUsers extends JFrame {
         JScrollPane scroll = new JScrollPane();
         scroll.setViewportView(list);
         contentPane.add(scroll, gridBagConstraintsList);
-        list.setFont(new Font("Verdana", 0, 18));
+        list.setFont(new Font("Consolas", Font.BOLD, 18));
+        list.setForeground(new Color(5, 135, 10));
     }
 
     public void update(String[] users){
         list.setListData(users);
+    }
+
+    public void setDialogLocation(int x, int y){
+        this.setLocation(x, y);
     }
 
 }
