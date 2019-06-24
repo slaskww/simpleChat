@@ -16,12 +16,15 @@ public class ClientGUI extends JFrame implements Runnable, ComponentListener{ //
     private JTextArea history;
     private JTextField txtMessage;
     private JButton btnSend;
+    private JMenuBar menuBar;
+    private JMenu mnFile;
     // private DefaultCaret caret;
 
     private Client client;
     private Thread listen, run;
     private boolean isRunning = false;
     private OnlineUsers users;
+    private Color defaultBackgroundColor = new Color(71, 89, 135);
 
 
 
@@ -58,21 +61,33 @@ public class ClientGUI extends JFrame implements Runnable, ComponentListener{ //
         setSize(880, 550);
         setLocationRelativeTo(null); /// If the component is null , the window is placed in the center of the screen
 
-        JMenuBar menuBar = new JMenuBar();
+        menuBar = new JMenuBar();
         setJMenuBar(menuBar);
 
 
-        JMenu mnFile = new JMenu("Menu");
+        mnFile = new JMenu("Menu");
         menuBar.add(mnFile);
 
         JMenuItem jMenuItemOnlineUsers = new JMenuItem("Online clients");
+        JMenuItem jMenuItemChangeColor = new JMenuItem("Change background color");
+
         jMenuItemOnlineUsers.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 users.setVisible(true);
             }
         });
+
+        jMenuItemChangeColor.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Color newBackgroundColor = JColorChooser.showDialog(null, "Choose a color for the background", defaultBackgroundColor);
+                setBackgroundColor(newBackgroundColor);
+            }
+        });
+
         mnFile.add(jMenuItemOnlineUsers);
+        mnFile.add(jMenuItemChangeColor);
 
         JMenuItem jMenuItemExit = new JMenuItem("Exit");
         mnFile.add(jMenuItemExit);
@@ -161,6 +176,11 @@ public class ClientGUI extends JFrame implements Runnable, ComponentListener{ //
 
     private void setFont(JTextComponent component) {
         component.setFont(new Font("Consolas", Font.PLAIN, 16)); //style: 0=plain, 1=bold, 2= italic
+    }
+
+    private void setBackgroundColor(Color color){
+        clientPane.setBackground(color);
+        users.setBackgroundColor(color);
     }
 
     private void send(String msg, boolean isMessageOrdinary) {

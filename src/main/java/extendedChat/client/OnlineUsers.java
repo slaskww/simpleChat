@@ -48,4 +48,8 @@ public class OnlineUsers extends JFrame {
         this.setLocation(x, y);
     }
 
+    public void setBackgroundColor(Color color){
+        contentPane.setBackground(color);
+    }
+
 }
